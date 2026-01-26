@@ -1,199 +1,411 @@
-<!DOCTYPE HTML>
-<html>
-	<head>
-		<title>구룡성채 | Kowloon Walled City</title>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-		<link rel="stylesheet" href="assets/css/main.css" />
-		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
-		<style>
-			/* === 구룡성채 커스텀 스타일 (강제 적용) === */
-			
-			/* 1. 보라색 배경 싹 다 죽이기 (완전 검은색으로 통일) */
-			body, #wrapper, #sidebar, section, .wrapper, .inner {
-				background-color: #000000 !important;
-				background-image: none !important; /* 기존 패턴 이미지 제거 */
-			}
-			
-			/* 2. 텍스트 및 선 색상 (네온 초록) */
-			body, h1, h2, h3, h4, h5, h6, p, li {
-				color: #33ff00 !important;
-				font-family: 'Courier New', Courier, monospace !important;
-				text-shadow: 0 0 3px #0f0; /* 약한 빛 번짐 효과 */
-			}
-			
-			a { color: #33ff00 !important; border-bottom-color: #33ff00 !important; }
-			hr { border-color: #33ff00 !important; }
-			
-			/* 3. 사이드바 초기 상태: 숨김 (투명도 0) */
-			#sidebar {
-				background-color: #050505 !important; /* 사이드바도 검은색 */
-				border-right: 1px solid #1a8000; /* 경계선 살짝 */
-				opacity: 0; /* 처음엔 안 보임 */
-				pointer-events: none; /* 클릭 안 됨 */
-				transition: opacity 2s ease; /* 2초 동안 천천히 나타남 */
-			}
-			
-			/* 입장 후 사이드바가 보일 때 (자바스크립트로 제어) */
-			body.is-entered #sidebar {
-				opacity: 1;
-				pointer-events: auto;
-			}
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>구룡성채 | Kowloon Walled City</title>
+    <link href="https://fonts.googleapis.com/css2?family=VT323&family=Noto+Sans+KR:wght@300;400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* ==========================================
+           KOWLOON WALLED CITY - Terminal Theme
+           Based on Kael Von Valderas Structure
+           ========================================== */
 
-			/* 4. 버튼 스타일 (각진 네모) */
-			.button {
-				border-radius: 0 !important;
-				border: 1px solid #33ff00 !important;
-				color: #33ff00 !important;
-				box-shadow: none !important;
-			}
-			.button:hover {
-				background-color: #33ff00 !important;
-				color: #000 !important;
-			}
+        /* 1. 핵심 변수 설정 (색상/폰트 통일) */
+        :root {
+            /* 팔레트: 네온 그린 & 리얼 블랙 */
+            --color-neon: #33ff00;
+            --color-neon-dim: #1a8000;
+            --color-neon-glare: rgba(51, 255, 0, 0.2);
+            --color-alert: #ff3333;
+            
+            /* 배경색 */
+            --color-bg-darkest: #020202; /* 완전 검정 */
+            --color-bg-panel: #0a0a0a;   /* 아주 어두운 회색 */
+            --color-scanline: rgba(0, 0, 0, 0.5);
 
-			/* 5. 인트로 오버레이 (초대장 화면) */
-			#intro-overlay {
-				position: fixed;
-				top: 0;
-				left: 0;
-				width: 100%;
-				height: 100%;
-				background-color: #000;
-				z-index: 20000; /* 사이드바보다 무조건 위에 */
-				display: flex;
-				flex-direction: column;
-				justify-content: center;
-				align-items: center;
-				text-align: center;
-				cursor: pointer;
-			}
+            /* 폰트 */
+            --font-terminal: 'VT323', monospace; /* 영어/숫자용 */
+            --font-body: 'Noto Sans KR', sans-serif; /* 한글용 */
 
-			/* 깜빡이는 커서 */
-			.blink { animation: blinker 1s linear infinite; }
-			@keyframes blinker { 50% { opacity: 0; } }
+            /* 효과 */
+            --glow-text: 0 0 5px var(--color-neon), 0 0 10px var(--color-neon-dim);
+            --border-neon: 1px solid var(--color-neon);
+            --transition-speed: 0.3s ease;
+        }
 
-			/* CRT 모니터 효과 (줄무늬) */
-			.scanlines {
-				position: fixed;
-				top: 0; left: 0; width: 100vw; height: 100vh;
-				background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
-				background-size: 100% 2px, 3px 100%;
-				pointer-events: none;
-				z-index: 30000; /* 제일 위에 덮음 */
-			}
-		</style>
-	</head>
-	<body class="is-preload">
+        /* 2. 기본 세팅 (Reset) */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            background-color: var(--color-bg-darkest);
+            color: var(--color-neon);
+            font-family: var(--font-body);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
 
-		<div class="scanlines"></div>
+        a { text-decoration: none; color: var(--color-neon); transition: var(--transition-speed); }
+        ul { list-style: none; }
 
-		<div id="intro-overlay" onclick="enterSite()">
-			<h1 style="font-size: 3rem; margin-bottom: 2rem;">
-				> SYSTEM BOOTING...<span class="blink">_</span>
-			</h1>
-			<p style="font-size: 1.2rem;">
-				[ 접속 승인 대기 중 ]
-			</p>
-			<div style="margin-top: 50px; border: 1px solid #33ff00; padding: 10px 30px;">
-				CLICK TO ACCESS
-			</div>
-		</div>
+        /* 스크롤바 커스텀 */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--color-bg-darkest); }
+        ::-webkit-scrollbar-thumb { background: var(--color-neon-dim); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--color-neon); }
 
-		<section id="sidebar">
-			<div class="inner">
-				<nav>
-					<ul>
-						<li><a href="#intro">간단한 소개글</a></li>
-						<li><a href="#lore">세계관</a></li>
-						<li><a href="#profile">프로필</a></li>
-						<li><a href="#gallery">갤러리</a></li>
-						<li><a href="#recommend">추천</a></li>
-						<li><a href="#download">다운로드</a></li>
-					</ul>
-				</nav>
-			</div>
-		</section>
+        /* ==========================================
+           3. CRT 모니터 효과 (Scanlines & Flicker)
+           ========================================== */
+        .crt-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            background-size: 100% 2px, 3px 100%;
+            pointer-events: none;
+            z-index: 9999;
+            animation: flicker 0.15s infinite;
+        }
 
-		<div id="wrapper">
+        @keyframes flicker {
+            0% { opacity: 0.9; }
+            5% { opacity: 0.85; }
+            10% { opacity: 0.9; }
+            100% { opacity: 0.9; }
+        }
 
-			<section id="intro" class="wrapper style1 fullscreen fade-up">
-				<div class="inner">
-					<h1>어서오세요, 구룡성채입니다.</h1>
-					<p>이곳은 법이 닿지 않는 유일한 해방구입니다.</p>
-					<ul class="actions">
-						<li><a href="#lore" class="button scrolly">입장 확인</a></li>
-					</ul>
-				</div>
-			</section>
+        /* ==========================================
+           4. 인트로 부팅 화면 (Boot Sequence)
+           ========================================== */
+        #boot-screen {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: #000;
+            z-index: 10000;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-family: var(--font-terminal);
+            font-size: 1.5rem;
+            text-align: center;
+            cursor: pointer;
+            transition: opacity 1s ease;
+        }
 
-			<section id="lore" class="wrapper style2 fade-up">
-				<div class="inner">
-					<h2>세계관 (World)</h2>
-					<p>홍콩의 어둠 속에 감춰진 진실.</p>
-				</div>
-			</section>
+        .boot-text { margin-bottom: 20px; text-shadow: var(--glow-text); }
+        .blink { animation: blinker 1s step-end infinite; }
+        @keyframes blinker { 50% { opacity: 0; } }
 
-			<section id="profile" class="wrapper style3 fade-up">
-				<div class="inner">
-					<h2>프로필 (Profile)</h2>
-					<p>관리자 정보.</p>
-				</div>
-			</section>
+        .click-start {
+            margin-top: 50px;
+            padding: 10px 20px;
+            border: 1px dashed var(--color-neon);
+            font-size: 1rem;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse { 0% { opacity: 0.5; } 50% { opacity: 1; } 100% { opacity: 0.5; } }
 
-			<section id="gallery" class="wrapper style2 fade-up">
-				<div class="inner">
-					<h2>갤러리 (Gallery)</h2>
-				</div>
-			</section>
+        /* ==========================================
+           5. 사이드바 (Navigation)
+           ========================================== */
+        .sidebar {
+            position: fixed;
+            left: 0; top: 0;
+            width: 260px;
+            height: 100vh;
+            background: var(--color-bg-panel);
+            border-right: 1px solid var(--color-neon-dim);
+            padding: 40px 20px;
+            transform: translateX(-100%); /* 처음엔 숨김 */
+            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+        }
 
-			<section id="recommend" class="wrapper style3 fade-up">
-				<div class="inner">
-					<h2>추천 (Recommend)</h2>
-				</div>
-			</section>
+        /* 부팅 후 사이드바 표시용 클래스 */
+        body.system-on .sidebar { transform: translateX(0); }
+        body.system-on .main-content { margin-left: 260px; } /* 본문 밀기 */
 
-			<section id="download" class="wrapper style1 fade-up">
-				<div class="inner">
-					<h2>다운로드 (Download)</h2>
-				</div>
-			</section>
+        .profile-box {
+            text-align: center;
+            margin-bottom: 40px;
+            border-bottom: 1px solid var(--color-neon-dim);
+            padding-bottom: 20px;
+        }
+        
+        .profile-img {
+            width: 100px; height: 100px;
+            border-radius: 50%;
+            border: 2px solid var(--color-neon);
+            object-fit: cover;
+            margin-bottom: 10px;
+            filter: grayscale(100%) contrast(1.2) drop-shadow(0 0 5px var(--color-neon));
+        }
 
-		</div>
+        .nav-menu li { margin-bottom: 15px; }
+        .nav-menu a {
+            display: block;
+            padding: 10px 15px;
+            border: 1px solid transparent;
+            font-family: var(--font-terminal);
+            font-size: 1.2rem;
+            letter-spacing: 2px;
+        }
+        .nav-menu a:hover {
+            background: var(--color-neon-glare);
+            border: var(--border-neon);
+            box-shadow: var(--glow-text);
+            color: #fff;
+        }
 
-		<footer id="footer" class="wrapper alt">
-			<div class="inner">
-				<ul class="menu">
-					<li>&copy; Kowloon Walled City.</li>
-				</ul>
-			</div>
-		</footer>
+        /* ==========================================
+           6. 메인 콘텐츠 (Main Content)
+           ========================================== */
+        .main-content {
+            margin-left: 0; /* 처음엔 0 */
+            padding: 60px 40px;
+            min-height: 100vh;
+            transition: margin-left 0.5s ease;
+        }
 
-		<script src="assets/js/jquery.min.js"></script>
-		<script src="assets/js/jquery.scrollex.min.js"></script>
-		<script src="assets/js/jquery.scrolly.min.js"></script>
-		<script src="assets/js/browser.min.js"></script>
-		<script src="assets/js/breakpoints.min.js"></script>
-		<script src="assets/js/util.js"></script>
-		<script src="assets/js/main.js"></script>
+        section {
+            margin-bottom: 100px;
+            opacity: 0; /* 스크롤 애니메이션용 */
+            transform: translateY(20px);
+            transition: all 0.8s ease;
+        }
+        
+        /* 스크롤 되면 나타나는 클래스 */
+        section.visible { opacity: 1; transform: translateY(0); }
 
-		<script>
-			// 사이트 입장 기능
-			function enterSite() {
-				// 1. 인트로 화면 제거
-				var intro = document.getElementById('intro-overlay');
-				intro.style.transition = 'opacity 1s';
-				intro.style.opacity = '0';
-				
-				setTimeout(function() {
-					intro.style.display = 'none';
-					
-					// 2. 사이드바 나타나게 하기 (Body에 클래스 추가)
-					document.body.classList.add('is-entered');
-					
-				}, 1000); // 1초 뒤 실행
-			}
-		</script>
+        h2 {
+            font-family: var(--font-terminal);
+            font-size: 2.5rem;
+            margin-bottom: 30px;
+            border-bottom: 2px solid var(--color-neon);
+            display: inline-block;
+            text-shadow: var(--glow-text);
+        }
 
-	</body>
+        p { margin-bottom: 20px; font-size: 1.1rem; color: #ccc; }
+
+        /* 카드 스타일 (Lore, Profile 등) */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .terminal-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--color-neon-dim);
+            padding: 20px;
+            transition: 0.3s;
+        }
+
+        .terminal-card:hover {
+            border-color: var(--color-neon);
+            box-shadow: 0 0 15px var(--color-neon-dim);
+            transform: translateY(-5px);
+        }
+
+        .terminal-card h3 {
+            font-family: var(--font-terminal);
+            color: var(--color-neon);
+            margin-bottom: 10px;
+            font-size: 1.5rem;
+        }
+
+        /* 갤러리 그리드 */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        .gallery-item {
+            aspect-ratio: 1;
+            background: #111;
+            border: 1px solid var(--color-neon-dim);
+            overflow: hidden;
+            position: relative;
+            cursor: pointer;
+        }
+        .gallery-item img {
+            width: 100%; height: 100%; object-fit: cover;
+            filter: grayscale(80%);
+            transition: 0.3s;
+        }
+        .gallery-item:hover img { filter: grayscale(0%); transform: scale(1.1); }
+
+        /* ==========================================
+           7. 다운로드 버튼 (전문가 스타일)
+           ========================================== */
+        .btn-download {
+            display: inline-block;
+            padding: 15px 40px;
+            border: 1px solid var(--color-neon);
+            background: transparent;
+            color: var(--color-neon);
+            font-family: var(--font-terminal);
+            font-size: 1.2rem;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        .btn-download:hover {
+            background: var(--color-neon);
+            color: #000;
+            box-shadow: 0 0 20px var(--color-neon);
+        }
+
+        /* 모바일 대응 */
+        @media (max-width: 768px) {
+            .sidebar { width: 100%; height: auto; position: relative; transform: none; display: none; }
+            body.system-on .sidebar { display: flex; }
+            body.system-on .main-content { margin-left: 0; }
+            .main-content { padding: 20px; }
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="crt-overlay"></div>
+
+    <div id="boot-screen" onclick="systemStart()">
+        <div class="boot-text">
+            > BIOS CHECKING... OK<br>
+            > MEMORY TEST... 640K OK<br>
+            > LOADING KOWLOON OS v1.0...<br>
+            <br>
+            <span style="color:var(--color-alert)">WARNING: RESTRICTED AREA</span>
+        </div>
+        <div class="boot-text">
+            어서오세요,<br>
+            구룡성채(九龍城砦)입니다.<span class="blink">_</span>
+        </div>
+        <div class="click-start">[ CLICK TO ACCESS ]</div>
+    </div>
+
+    <nav class="sidebar">
+        <div class="profile-box">
+            <img src="https://via.placeholder.com/150" alt="Admin" class="profile-img">
+            <h3 style="font-family: var(--font-terminal);">USER_UNKNOWN</h3>
+            <p style="font-size: 0.8rem; color: #666;">Level 1. Citizen</p>
+        </div>
+        <ul class="nav-menu">
+            <li><a href="#intro">01. INTRO</a></li>
+            <li><a href="#lore">02. WORLD</a></li>
+            <li><a href="#character">03. PROFILE</a></li>
+            <li><a href="#gallery">04. GALLERY</a></li>
+            <li><a href="#download">05. DATA</a></li>
+        </ul>
+    </nav>
+
+    <main class="main-content">
+        
+        <section id="intro" class="animate-on-scroll">
+            <h2>01. SYSTEM_INTRO</h2>
+            <p>
+                이곳은 법이 닿지 않는 곳, 잊혀진 도시입니다.<br>
+                80년대 홍콩의 어둠과 네온사인이 공존하는 공간.<br>
+                당신은 이곳에서 무엇을 찾고 있습니까?
+            </p>
+            <p style="color: var(--color-neon-dim)">
+                > Connection established...<br>
+                > User location: Trace failed.<br>
+                > Status: Illegal Entry.
+            </p>
+        </section>
+
+        <section id="lore" class="animate-on-scroll">
+            <h2>02. WORLD_DATA</h2>
+            <div class="card-grid">
+                <div class="terminal-card">
+                    <h3>구역 A: 빈민가</h3>
+                    <p>빛이 들어오지 않는 하층 구역. 쥐와 전선이 얽혀있다.</p>
+                </div>
+                <div class="terminal-card">
+                    <h3>구역 B: 상점가</h3>
+                    <p>불법 의술, 개조된 기계 부품, 그리고 정보를 파는 곳.</p>
+                </div>
+                <div class="terminal-card">
+                    <h3>구역 C: 옥상</h3>
+                    <p>유일하게 하늘을 볼 수 있는 곳. 비행기 소음이 끊이지 않는다.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="character" class="animate-on-scroll">
+            <h2>03. SUBJECT_PROFILE</h2>
+            <div style="border: 1px solid var(--color-neon); padding: 20px; display: flex; gap: 20px; align-items: center; flex-wrap: wrap;">
+                <div style="flex: 1; min-width: 200px;">
+                    <img src="https://via.placeholder.com/300x400" alt="Character" style="width: 100%; border: 1px solid var(--color-neon-dim);">
+                </div>
+                <div style="flex: 2;">
+                    <h3 style="font-size: 2rem; margin-bottom: 10px;">NAME: Kael</h3>
+                    <ul style="font-family: var(--font-terminal); font-size: 1.2rem; line-height: 1.8;">
+                        <li>> AGE: UNKNOWN</li>
+                        <li>> ROLE: MERCENARY</li>
+                        <li>> WEAPON: CUSTOM REVOLVER</li>
+                        <li>> STATUS: <span style="color:var(--color-alert)">WANTED</span></li>
+                    </ul>
+                    <br>
+                    <p>"내 구역에서 얼쩡거리지 마라. 목숨이 두 개가 아니라면."</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="gallery" class="animate-on-scroll">
+            <h2>04. VISUAL_LOGS</h2>
+            <div class="gallery-grid">
+                <div class="gallery-item"><img src="https://via.placeholder.com/200" alt="log1"></div>
+                <div class="gallery-item"><img src="https://via.placeholder.com/200" alt="log2"></div>
+                <div class="gallery-item"><img src="https://via.placeholder.com/200" alt="log3"></div>
+                <div class="gallery-item"><img src="https://via.placeholder.com/200" alt="log4"></div>
+            </div>
+        </section>
+
+        <section id="download" class="animate-on-scroll">
+            <h2>05. DOWNSTREAM</h2>
+            <p>암호화된 데이터 패킷을 전송합니다.</p>
+            <a href="#" class="btn-download">
+                [ DOWNLOAD_DATA.ZIP ]
+            </a>
+        </section>
+
+        <footer style="margin-top: 100px; border-top: 1px solid var(--color-neon-dim); padding-top: 20px; text-align: center; color: #666;">
+            <p>&copy; 2026 KOWLOON SYSTEM. TERMINAL DISCONNECTED.</p>
+        </footer>
+
+    </main>
+
+    <script>
+        // 1. 시스템 시작 (클릭 시)
+        function systemStart() {
+            const bootScreen = document.getElementById('boot-screen');
+            bootScreen.style.opacity = '0';
+            setTimeout(() => {
+                bootScreen.style.display = 'none';
+                document.body.classList.add('system-on'); // 사이드바 등장
+            }, 1000);
+        }
+
+        // 2. 스크롤 애니메이션 (Intersection Observer)
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.animate-on-scroll').forEach((section) => {
+            observer.observe(section);
+        });
+    </script>
+</body>
 </html>
