@@ -6,35 +6,250 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 		<link rel="stylesheet" href="assets/css/main.css" />
 		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+		<style>
+			/* === 80년대 터미널/사이버펑크 커스텀 스타일 === */
+			
+			/* 전체 색감 변경: 검은 바탕 + 네온 초록 글씨 */
+			body, #sidebar, #wrapper {
+				background-color: #050505 !important;
+				background-image: none !important; /* 기존 배경 제거 */
+				color: #33ff00 !important;
+				font-family: 'Courier New', Courier, monospace !important; /* 타자기 폰트 */
+			}
+
+			/* 제목, 링크, 테두리 색상 변경 */
+			h1, h2, h3, h4, h5, h6, a, strong, b {
+				color: #33ff00 !important;
+				text-shadow: 0 0 5px #33ff00; /* 네온 글로우 효과 */
+			}
+			
+			/* 선, 테두리 색상 */
+			hr, .image:before, input, textarea, select {
+				border-color: #33ff00 !important;
+			}
+			
+			/* 버튼 스타일 변경 */
+			input[type="submit"], input[type="reset"], input[type="button"], button, .button {
+				background-color: transparent !important;
+				box-shadow: inset 0 0 0 2px #33ff00 !important;
+				color: #33ff00 !important;
+				border-radius: 0 !important; /* 둥근 모서리 제거 (각지게) */
+			}
+			.button:hover {
+				background-color: #33ff00 !important;
+				color: #000 !important;
+				box-shadow: 0 0 10px #33ff00 !important;
+			}
+
+			/* 사이드바 메뉴 스타일 */
+			#sidebar nav ul li a {
+				color: #33ff00 !important;
+				border: none !important;
+				opacity: 0.6;
+			}
+			#sidebar nav ul li a.active {
+				opacity: 1;
+				text-decoration: underline;
+				background: none !important;
+			}
+
+			/* === 인트로 화면 (초대장) 스타일 === */
+			#intro-overlay {
+				position: fixed;
+				top: 0;
+				left: 0;
+				width: 100%;
+				height: 100%;
+				background-color: #000;
+				z-index: 9999; /* 제일 위에 띄움 */
+				display: flex;
+				flex-direction: column;
+				justify-content: center;
+				align-items: center;
+				text-align: center;
+				cursor: pointer; /* 클릭 가능 표시 */
+				transition: opacity 1s ease; /* 서서히 사라짐 */
+			}
+			
+			.terminal-text {
+				font-size: 2rem;
+				color: #33ff00;
+				text-shadow: 0 0 10px #33ff00;
+				margin-bottom: 20px;
+			}
+			
+			.blink {
+				animation: blinker 1s linear infinite;
+			}
+			
+			@keyframes blinker {
+				50% { opacity: 0; }
+			}
+
+			.click-hint {
+				font-size: 1rem;
+				color: #1a8000;
+				margin-top: 50px;
+				border: 1px dashed #1a8000;
+				padding: 10px 20px;
+			}
+
+			/* CRT 모니터 스캔라인 효과 (화면 줄무늬) */
+			.scanlines {
+				position: fixed;
+				left: 0;
+				top: 0;
+				width: 100vw;
+				height: 100vh;
+				background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+				background-size: 100% 2px, 3px 100%;
+				pointer-events: none; /* 클릭 통과 */
+				z-index: 10000;
+			}
+		</style>
 	</head>
 	<body class="is-preload">
 
-		<header id="header">
-				<a href="index.html" class="title">Kowloon Walled City</a>
+		<div class="scanlines"></div>
+
+		<div id="intro-overlay" onclick="enterSite()">
+			<div class="terminal-text">
+				> SYSTEM BOOTING...<br>
+				> CONNECTING TO SERVER...<br><br>
+				어서오세요,<br>
+				구룡성채(九龍城砦)입니다.<span class="blink">_</span>
+			</div>
+			<div class="click-hint">[ CLICK TO ACCESS ]</div>
+		</div>
+
+		<section id="sidebar">
+			<div class="inner">
 				<nav>
 					<ul>
-						<li><a href="index.html" class="active">메인</a></li>
-						<li><a href="#">설정</a></li>
-						<li><a href="#">등장인물</a></li>
+						<li><a href="#intro">간단한 소개글</a></li>
+						<li><a href="#lore">세계관</a></li>
+						<li><a href="#profile">프로필</a></li>
+						<li><a href="#gallery">갤러리</a></li>
+						<li><a href="#recommend">추천</a></li>
+						<li><a href="#download">다운로드</a></li>
 					</ul>
 				</nav>
-			</header>
+			</div>
+		</section>
 
 		<div id="wrapper">
 
-				<section id="main" class="wrapper">
-						<div class="inner">
-							<h1 class="major">환영합니다</h1>
-							<p>이곳은 구룡성채입니다. 원하시는 내용을 적으세요.</p>
-							
-							<ul class="actions">
-								<li><a href="#" class="button primary">입장하기</a></li>
-								<li><a href="#" class="button">더 알아보기</a></li>
-							</ul>
-						</div>
-					</section>
+			<section id="intro" class="wrapper style1 fullscreen fade-up">
+				<div class="inner">
+					<h1>구룡성채</h1>
+					<p>
+						이곳은 법이 닿지 않는 곳, 잊혀진 도시입니다.<br>
+						80년대 홍콩의 어둠과 네온사인이 공존하는 공간.<br>
+						당신은 이곳에서 무엇을 찾고 있습니까?
+					</p>
+					<ul class="actions">
+						<li><a href="#lore" class="button scrolly">세계관 확인하기</a></li>
+					</ul>
+				</div>
+			</section>
 
-			</div>
+			<section id="lore" class="wrapper style2 fade-up">
+				<div class="inner">
+					<h2>세계관 (World)</h2>
+					<p>
+						> 198X년, 반환을 앞둔 홍콩.<br>
+						> 거대한 성벽 안에서 벌어지는 기묘한 사건들.<br>
+						> 인간과 인외가 뒤섞인 무법지대.
+					</p>
+					<ul class="features">
+						<section>
+							<span class="icon solid major fa-city"></span>
+							<h3>도시 구조</h3>
+							<p>미로처럼 얽힌 건물과 파이프.</p>
+						</section>
+						<section>
+							<span class="icon solid major fa-users"></span>
+							<h3>거주민</h3>
+							<p>각자의 사연을 가진 3만 명의 사람들.</p>
+						</section>
+					</ul>
+				</div>
+			</section>
+
+			<section id="profile" class="wrapper style3 fade-up">
+				<div class="inner">
+					<h2>프로필 (Profile)</h2>
+					<p>이곳을 관리하는 관리자 또는 캐릭터의 정보입니다.</p>
+					
+					<div class="split style1">
+						<section>
+							<span class="image fit"><img src="images/pic01.jpg" alt="" /></span>
+						</section>
+						<section>
+							<ul class="contact">
+								<li>
+									<h3>NAME</h3>
+									<span>User_Kowloon</span>
+								</li>
+								<li>
+									<h3>ROLE</h3>
+									<span>Administrator</span>
+								</li>
+								<li>
+									<h3>STATUS</h3>
+									<span>Online</span>
+								</li>
+								<li>
+									<h3>SNS</h3>
+									<ul class="icons">
+										<li><a href="#" class="icon brands fa-twitter"><span class="label">Twitter</span></a></li>
+										<li><a href="#" class="icon brands fa-github"><span class="label">GitHub</span></a></li>
+									</ul>
+								</li>
+							</ul>
+						</section>
+					</div>
+				</div>
+			</section>
+
+			<section id="gallery" class="wrapper style2 fade-up">
+				<div class="inner">
+					<h2>갤러리 (Gallery)</h2>
+					<p>도시의 기록들을 열람합니다.</p>
+					<div class="box alt">
+						<div class="row gtr-uniform">
+							<div class="col-4"><span class="image fit"><img src="images/pic01.jpg" alt="" /></span></div>
+							<div class="col-4"><span class="image fit"><img src="images/pic02.jpg" alt="" /></span></div>
+							<div class="col-4"><span class="image fit"><img src="images/pic03.jpg" alt="" /></span></div>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<section id="recommend" class="wrapper style3 fade-up">
+				<div class="inner">
+					<h2>추천 (Recommendations)</h2>
+					<p>관리자가 추천하는 데이터 목록입니다.</p>
+					<ul>
+						<li>추천 항목 1: 텍스트 데이터</li>
+						<li>추천 항목 2: 음악 파일</li>
+						<li>추천 항목 3: 외부 링크</li>
+					</ul>
+				</div>
+			</section>
+
+			<section id="download" class="wrapper style1 fade-up">
+				<div class="inner">
+					<h2>다운로드 (Download)</h2>
+					<p>공개된 리소스를 내려받으십시오.</p>
+					<ul class="actions">
+						<li><a href="#" class="button primary icon solid fa-download">System_Data.zip</a></li>
+						<li><a href="#" class="button icon solid fa-file-alt">Read_Me.txt</a></li>
+					</ul>
+				</div>
+			</section>
+
+		</div>
 
 		<footer id="footer" class="wrapper alt">
 				<div class="inner">
@@ -51,6 +266,17 @@
 			<script src="assets/js/breakpoints.min.js"></script>
 			<script src="assets/js/util.js"></script>
 			<script src="assets/js/main.js"></script>
+
+			<script>
+				// 인트로 화면 클릭 시 사라지는 기능
+				function enterSite() {
+					var intro = document.getElementById('intro-overlay');
+					intro.style.opacity = '0'; // 투명하게 만듦
+					setTimeout(function() {
+						intro.style.display = 'none'; // 완전히 없앰
+					}, 1000); // 1초 뒤에 실행
+				}
+			</script>
 
 	</body>
 </html>
