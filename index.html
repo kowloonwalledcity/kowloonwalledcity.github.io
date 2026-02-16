@@ -289,6 +289,16 @@
         .mobile-toggle { display: none; position: fixed; top: 20px; left: 20px; z-index: 10001; background: var(--bg-panel); border: var(--border-active); padding: 10px 15px; cursor: pointer; font-size: 1.5rem; }
         @media (max-width: 768px) { .mobile-toggle { display: block; } }
 
+        /* SPOILER BLOCK */
+        .spoiler-block { max-width: 700px; margin: 30px auto 0; border: 1px solid var(--alert-red); background: rgba(255,8,68,0.03); }
+        .spoiler-header { display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; cursor: pointer; transition: all 0.3s; }
+        .spoiler-header:hover { background: rgba(255,8,68,0.08); }
+        .spoiler-label { font-family: var(--font-tech); font-size: 0.85rem; color: var(--alert-red); letter-spacing: 2px; }
+        .spoiler-toggle { font-size: 0.75rem; color: var(--neon-dim); letter-spacing: 1px; }
+        .spoiler-content { padding: 0 20px; max-height: 0; overflow: hidden; transition: max-height 0.4s ease, padding 0.4s ease; }
+        .spoiler-content.revealed { max-height: 300px; padding: 0 20px 20px; }
+        .spoiler-content p { color: #cc9090; font-size: 0.85rem; line-height: 1.8; font-family: var(--font-kr); }
+
         /* LIGHTBOX */
         .lightbox-overlay { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.92); z-index: 20000; justify-content: center; align-items: center; cursor: zoom-out; backdrop-filter: blur(6px); }
         .lightbox-overlay.active { display: flex; animation: lb-in 0.25s ease-out; }
@@ -363,9 +373,8 @@
                     <li class="nav-item"><a href="#" data-section="worldview"><span class="nav-icon">02</span> WORLDVIEW</a></li>
                     <li class="nav-item"><a href="#" data-section="features"><span class="nav-icon">03</span> FEATURES</a></li>
                     <li class="nav-item"><a href="#" data-section="characters"><span class="nav-icon">04</span> PROFILES</a></li>
-                    <li class="nav-item"><a href="#" data-section="gallery"><span class="nav-icon">05</span> VISUAL LOGS</a></li>
-                    <li class="nav-item"><a href="#" data-section="warning"><span class="nav-icon">06</span> WARNING</a></li>
-                    <li class="nav-item"><a href="#" data-section="download"><span class="nav-icon">07</span> DOWNLOAD</a></li>
+                    <li class="nav-item"><a href="#" data-section="warning"><span class="nav-icon">05</span> WARNING</a></li>
+                    <li class="nav-item"><a href="#" data-section="download"><span class="nav-icon">06</span> DOWNLOAD</a></li>
                 </ul>
             </nav>
 
@@ -529,9 +538,7 @@
                 <h1 class="section-title">FEATURES</h1>
                 <p class="section-subtitle">실리태번 구룡성채 봇 — 시스템 기능 안내</p>
 
-                <div class="text-content" style="margin-bottom: 50px;">
-                    <p>구룡성채 봇은 단순한 텍스트 응답을 넘어, QR 기반의 인터랙티브 시스템을 통해 성채 내부를 직접 탐색하고, 거래하고, 정보를 수집할 수 있는 몰입형 기능을 제공합니다. 아래는 주요 시스템 기능의 상세 안내입니다.</p>
-                </div>
+
 
                 <!-- Feature 1: Map -->
                 <div class="feature-card">
@@ -579,7 +586,7 @@
                         <ul class="feature-bullets">
                             <li>구룡성채 내부의 소식, 사건, 소문 등이 비정기적으로 방송됩니다.</li>
                             <li>유저의 생존에 도움이 될 수 있는 힌트나 경고가 라디오를 통해 전달됩니다.</li>
-                            <li>주파수를 맞추는 타이밍에 따라 들을 수 있는 정보가 달라질 수 있습니다.</li>
+                            <li>매번 방송 내용이 달라지며, 확인할 때마다 새로운 정보를 얻을 수 있습니다.</li>
                         </ul>
                     </div>
                 </div>
@@ -917,47 +924,43 @@
 
             </section>
 
-            <!-- ======== VISUAL LOGS ======== -->
-            <section class="content-section" id="gallery">
-                <h1 class="section-title">VISUAL LOGS</h1>
-                <p class="section-subtitle">Captured moments from the void</p>
-                <div class="terminal-box">
-                    <div class="line">> LOADING IMAGE DATABASE...</div>
-                    <div class="line" style="color: var(--neon-dim);">> QUALITY: DEGRADED / SOURCE: SURVEILLANCE CAMS</div>
-                </div>
-                <div class="gallery-grid">
-                    <div class="gallery-item"><img src="https://via.placeholder.com/300/0a0a0a/00ff41?text=LOG_001" alt="Visual Log 1"></div>
-                    <div class="gallery-item"><img src="https://via.placeholder.com/300/0a0a0a/00ff41?text=LOG_002" alt="Visual Log 2"></div>
-                    <div class="gallery-item"><img src="https://via.placeholder.com/300/0a0a0a/00ff41?text=LOG_003" alt="Visual Log 3"></div>
-                    <div class="gallery-item"><img src="https://via.placeholder.com/300/0a0a0a/00ff41?text=LOG_004" alt="Visual Log 4"></div>
-                    <div class="gallery-item"><img src="https://via.placeholder.com/300/0a0a0a/00ff41?text=LOG_005" alt="Visual Log 5"></div>
-                    <div class="gallery-item"><img src="https://via.placeholder.com/300/0a0a0a/00ff41?text=LOG_006" alt="Visual Log 6"></div>
-                    <div class="gallery-item"><img src="https://via.placeholder.com/300/0a0a0a/00ff41?text=LOG_007" alt="Visual Log 7"></div>
-                    <div class="gallery-item"><img src="https://via.placeholder.com/300/0a0a0a/00ff41?text=LOG_008" alt="Visual Log 8"></div>
-                </div>
-            </section>
-
             <!-- ======== WARNING ======== -->
             <section class="content-section" id="warning">
                 <h1 class="section-title">WARNING</h1>
-                <p class="section-subtitle">Read carefully before proceeding</p>
+                <p class="section-subtitle">시작 전 반드시 확인하세요</p>
+
                 <div class="warning-container">
                     <div class="warning-icon">⚠</div>
-                    <h2 class="warning-title-main">RESTRICTED AREA</h2>
-                    <p class="warning-text">이 터미널에 접속한 순간, 당신은 불법 영역에 진입했습니다.</p>
-                    <p class="warning-text">구룡성채는 어떠한 법적 관할권에도 속하지 않습니다.<br>이곳에서 발생하는 모든 사건에 대해 당국은 책임지지 않습니다.</p>
-                    <p class="warning-text" style="margin-top: 30px; font-size: 1.1rem; color: var(--alert-red);">
-                        <strong>경고:</strong> 이 정보는 허가되지 않은 접근입니다.<br>
-                        당신의 IP 주소는 기록되었습니다.<br>
-                        즉시 연결을 종료하는 것을 권장합니다.
+                    <h2 class="warning-title-main">CONTENT WARNING</h2>
+                    
+                    <p class="warning-text" style="text-align: left; max-width: 700px; margin: 0 auto 20px;">
+                        본 봇에는 <strong style="color: var(--alert-red);">비윤리적인 내용과 비위가 상하는 묘사 및 이미지</strong>가 포함되어 있습니다.
                     </p>
+                    <p class="warning-text" style="text-align: left; max-width: 700px; margin: 0 auto 20px;">
+                        인육, 약물, 살인, 강간, 폭행 등의 적나라한 묘사와 이미지가 포함되어 있으며,
+                        등장인물과 호감도를 올리며 연애하는 것보다 <strong style="color: var(--alert-orange);">등장인물로부터 살아남아 이곳을 탈출하는 것</strong>에 가까운 구조입니다.
+                    </p>
+                    <p class="warning-text" style="text-align: left; max-width: 700px; margin: 0 auto 25px;">
+                        깡캐는 <strong style="color: var(--neon-primary);">여캐로 설정하는 것이 자연스러우며</strong>, 남캐로 설정 시 고쳐야 할 부분이 많거나 어색한 부분이 있을 수 있습니다.
+                    </p>
+
+                    <!-- Asset Spoiler -->
+                    <div class="spoiler-block" id="asset-spoiler">
+                        <div class="spoiler-header" onclick="toggleSpoiler()">
+                            <span class="spoiler-label">ASSET SPOILER</span>
+                            <span class="spoiler-toggle" id="spoiler-toggle-text">[ CLICK TO REVEAL ]</span>
+                        </div>
+                        <div class="spoiler-content" id="spoiler-content">
+                            <p>기본적으로 혈흔 묘사, 깡캐가 살해당하는 시점의 모습, 인육이나 날고기, 비위생적인 음식, 절단된 신체, 다소 놀랄 수도 있는 캐릭터의 표정 등이 에셋 이미지에 포함되어 있습니다.</p>
+                        </div>
+                    </div>
                 </div>
+
                 <div class="terminal-box" style="max-width: 800px; margin: 60px auto 0;">
-                    <div class="line" style="color: var(--alert-red);">> SECURITY BREACH DETECTED</div>
-                    <div class="line">> TRACING CONNECTION... FAILED</div>
-                    <div class="line">> USER LOCATION: UNKNOWN</div>
-                    <div class="line" style="color: var(--alert-orange);">> RECOMMENDATION: DISCONNECT IMMEDIATELY</div>
-                    <div class="line" style="margin-top: 20px; color: var(--neon-dim);">> But you won't, will you?</div>
+                    <div class="line" style="color: var(--alert-red);">> CONTENT CLASSIFICATION: EXTREME</div>
+                    <div class="line">> RECOMMENDED AGE: 18+</div>
+                    <div class="line" style="color: var(--alert-orange);">> PROCEED AT YOUR OWN RISK</div>
+                    <div class="line" style="margin-top: 20px; color: var(--neon-dim);">> You have been warned.</div>
                 </div>
             </section>
 
@@ -965,17 +968,16 @@
             <section class="content-section" id="download">
                 <h1 class="section-title">DOWNLOAD</h1>
                 <p class="section-subtitle">Encrypted data packets available</p>
-                <div class="text-content">
-                    <p>아래 링크를 통해 구룡성채 관련 암호화된 데이터를 다운로드할 수 있습니다.<br>파일에는 상세 지도, 인물 프로필, 역사 기록이 포함되어 있습니다.</p>
-                </div>
+
                 <div class="terminal-box">
                     <div class="line">> PREPARING DATA PACKAGE...</div>
                     <div class="line" style="color: var(--neon-dim);">> SIZE: 2.47 GB / FORMAT: ENCRYPTED .ZIP</div>
                     <div class="line" style="color: var(--neon-dim);">> ENCRYPTION: AES-256 / PASSWORD REQUIRED</div>
                     <div class="line" style="color: var(--neon-primary); margin-top: 15px;">> STATUS: READY FOR DOWNLOAD</div>
                 </div>
+
                 <div class="download-container">
-                    <a href="#" class="btn-download">[ DOWNLOAD DATA PACKAGE ]</a>
+                    <a href="https://drive.proton.me/urls/G8MKJAV2EW#UzBYju3r3pcw" target="_blank" class="btn-download">[ DOWNLOAD ]</a>
                     <p style="margin-top: 30px; color: var(--neon-dim); font-size: 0.9rem;">다운로드 시 자동으로 추적 시스템이 활성화됩니다.<br>계속 진행하시겠습니까?</p>
                 </div>
             </section>
@@ -1037,13 +1039,13 @@
         }
         setInterval(updateSystemTime, 1000);
 
-        // DOWNLOAD
-        document.querySelector('.btn-download').addEventListener('click', function(e) {
-            e.preventDefault();
-            if (confirm('WARNING: Download will activate tracking system. Continue?')) {
-                alert('DOWNLOAD INITIATED\n\nTracking your connection...\nJust kidding. Add your actual download link here.');
-            }
-        });
+        // SPOILER TOGGLE
+        function toggleSpoiler() {
+            const content = document.getElementById('spoiler-content');
+            const toggleText = document.getElementById('spoiler-toggle-text');
+            content.classList.toggle('revealed');
+            toggleText.textContent = content.classList.contains('revealed') ? '[ CLICK TO HIDE ]' : '[ CLICK TO REVEAL ]';
+        }
 
         // PROFILE TABS
         function switchProfileTab(tab) {
@@ -1073,7 +1075,7 @@
             }
         });
         // Make all content images clickable
-        document.querySelectorAll('.main-char-portrait img, .feature-image-wrap img, .gallery-item img, .character-image img').forEach(img => {
+        document.querySelectorAll('.main-char-portrait img, .feature-image-wrap img, .character-image img').forEach(img => {
             img.classList.add('clickable-img');
             img.addEventListener('click', function(e) {
                 e.stopPropagation();
